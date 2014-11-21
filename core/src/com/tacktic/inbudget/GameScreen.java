@@ -39,7 +39,7 @@ public class GameScreen extends BaseScreen {
 			spawnRaindrop();
 		}
 		if (spawnInterval > 0) {
-			spawnInterval--;
+			spawnInterval -= 100000;
 		}
 	}
 
