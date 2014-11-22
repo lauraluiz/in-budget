@@ -49,10 +49,6 @@ public class InBudget extends Game {
         return sphere;
     }
 
-    public CompletableFuture<List<Category>> rounds() {
-        return rounds;
-    }
-
     public CompletableFuture<Array<Item>> fetchRound(final int round) {
         return rounds.thenCompose(new Function<List<Category>, CompletableFuture<Array<Item>>>() {
             @Override
