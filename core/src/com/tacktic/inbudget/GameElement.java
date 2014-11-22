@@ -12,19 +12,29 @@ public abstract class GameElement {
 
     abstract Rectangle box();
 
-    abstract float x();
+    public float x() {
+        return box().x;
+    }
 
-    abstract float y();
+    public float y() {
+        return box().y;
+    }
 
-    abstract float width();
+    public void x(float x) {
+        box().x = x;
+    }
 
-    abstract float height();
+    public void y (float y) {
+        box().y = y;
+    }
 
-    abstract void x(float x);
+    public float width() {
+        return box().width;
+    }
 
-    abstract void y (float y);
-
-    abstract void fixPosition();
+    public float height() {
+        return box().height;
+    }
 
     public boolean outOfScreen() {
         return y() + height() < 0 || x() + width() < 0

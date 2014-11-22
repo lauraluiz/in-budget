@@ -1,42 +1,33 @@
 package com.tacktic.inbudget;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.Iterator;
 
 public class GameScreen extends BaseScreen {
-	private Bucket bucket;
-	private Array<Raindrop> raindrops;
+	private Array<Item> items;
 	private long lastDropTime;
 	private int spawnInterval = 1000000000;
-	private int dropsGathered = 0;
 
 	public GameScreen(InBudget game) {
 		super(game);
 		resources().playBackgroundMusic();
-		bucket = new Bucket(resources());
-		raindrops = new Array<Raindrop>();
-		spawnRaindrop();
+		items = new Array<Item>();
 	}
 
 	@Override
 	public void renderBatch() {
-		write("Drops collected " + dropsGathered, 0, 480);
-		draw(bucket);
-		for (Raindrop raindrop : raindrops) {
-			draw(raindrop);
+		for (Item item : items) {
+			draw(item);
 		}
 	}
 
 	@Override
 	public void renderActions() {
-		moveBucket();
-		moveDrops();
+		moveItems();
 		if (TimeUtils.nanoTime() - lastDropTime > spawnInterval) {
-			spawnRaindrop();
+			spawnItem();
 		}
 		if (spawnInterval > 0) {
 			spawnInterval -= 100000;
@@ -73,37 +64,19 @@ public class GameScreen extends BaseScreen {
 
 	}
 
-	private void spawnRaindrop() {
-		raindrops.add(new Raindrop(resources()));
-		lastDropTime = TimeUtils.nanoTime();
-	}
-
-	private void moveBucket() {
-		if (Gdx.input.isTouched()) {
-			bucket.setXTo(touchPosition().x);
-		} else {
-			if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-				bucket.moveLeft();
-			}
-			if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-				bucket.moveRight();
-			}
+	private void spawnItem() {
+		if (roundItems().size > 0) {
+			items.add(roundItems().pop());
+			lastDropTime = TimeUtils.nanoTime();
 		}
-		bucket.fixPosition();
 	}
 
-	private void moveDrops() {
-		Iterator<Raindrop> iterator = raindrops.iterator();
+	private void moveItems() {
+		Iterator<Item> iterator = items.iterator();
 		while (iterator.hasNext()) {
-			Raindrop raindrop = iterator.next();
-			raindrop.moveDown();
-			raindrop.fixPosition();
-			if (raindrop.outOfScreen()) {
-				iterator.remove();
-			}
-			if (raindrop.box().overlaps(bucket.box())) {
-				dropsGathered++;
-				raindrop.playSound();
+			Item item = iterator.next();
+			item.moveDown();
+			if (item.outOfScreen()) {
 				iterator.remove();
 			}
 		}

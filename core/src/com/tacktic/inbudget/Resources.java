@@ -6,24 +6,22 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Resources {
-    private Texture dropImage;
-    private Texture bucketImage;
+    private Texture tvImage;
     private Sound dropSound;
     private Music rainMusic;
 
     public Resources() {
-        dropImage = new Texture(Gdx.files.internal("droplet.png"));
-        bucketImage = new Texture(Gdx.files.internal("bucket.png"));
+        tvImage = new Texture(Gdx.files.internal("bucket.png"));
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
         rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
     }
 
-    public Texture dropImage() {
-        return dropImage;
-    }
-
-    public Texture bucketImage() {
-        return bucketImage;
+    public Texture itemImage(String itemId) {
+        if (itemId.equals("tv")) {
+            return tvImage;
+        } else {
+            throw new RuntimeException("Image not found: " + itemId);
+        }
     }
 
     public Sound dropSound() {
@@ -36,8 +34,7 @@ public class Resources {
     }
 
     public void dispose() {
-        dropImage.dispose();
-        bucketImage.dispose();
+        tvImage.dispose();
         dropSound.dispose();
         rainMusic.dispose();
     }

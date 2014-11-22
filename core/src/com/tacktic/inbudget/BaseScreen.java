@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 
 public abstract class BaseScreen implements Screen {
     public static final int VIEWPORT_WIDTH = 640;
@@ -22,6 +23,15 @@ public abstract class BaseScreen implements Screen {
 
     public Resources resources() {
         return game.resources();
+    }
+
+    public Array<Item> roundItems() {
+        try {
+            return game.roundItems().get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Items could not be fetched");
+        }
     }
 
     @Override
