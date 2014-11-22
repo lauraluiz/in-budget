@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.concurrent.CompletableFuture;
+
 public abstract class BaseScreen implements Screen {
     public static final int VIEWPORT_WIDTH = 640;
     public static final int VIEWPORT_HEIGHT = 960;
@@ -25,13 +27,8 @@ public abstract class BaseScreen implements Screen {
         return game.resources();
     }
 
-    public Array<Item> roundItems() {
-        try {
-            return game.roundItems().get();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Items could not be fetched");
-        }
+    public CompletableFuture<Array<Item>> changeRound(int round) {
+        return game.fetchRound(round);
     }
 
     @Override
@@ -54,8 +51,8 @@ public abstract class BaseScreen implements Screen {
 
     abstract void renderActions();
 
-    protected void moveToGameScreen() {
-        game.setScreen(new GameScreen(game));
+    protected void moveToGameScreen(Array<Item> items) {
+        game.setScreen(new GameScreen(game, items));
         dispose();
     }
 

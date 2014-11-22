@@ -6,19 +6,21 @@ import com.badlogic.gdx.utils.TimeUtils;
 import java.util.Iterator;
 
 public class GameScreen extends BaseScreen {
-	private Array<Item> items;
+	private Array<Item> availableItems;
+	private Array<Item> displayedItems;
 	private long lastDropTime;
 	private int spawnInterval = 1000000000;
 
-	public GameScreen(InBudget game) {
+	public GameScreen(InBudget game, Array<Item> allItems) {
 		super(game);
-		resources().playBackgroundMusic();
-		items = new Array<Item>();
+		this.availableItems = allItems;
+		this.displayedItems = new Array<Item>();
 	}
 
 	@Override
 	public void renderBatch() {
-		for (Item item : items) {
+		write("Items in cue: " + availableItems.size, 100, 100);
+		for (Item item : displayedItems) {
 			draw(item);
 		}
 	}
@@ -65,14 +67,14 @@ public class GameScreen extends BaseScreen {
 	}
 
 	private void spawnItem() {
-		if (roundItems().size > 0) {
-			items.add(roundItems().pop());
+		if (availableItems.size > 0) {
+			displayedItems.add(availableItems.pop());
 			lastDropTime = TimeUtils.nanoTime();
 		}
 	}
 
 	private void moveItems() {
-		Iterator<Item> iterator = items.iterator();
+		Iterator<Item> iterator = displayedItems.iterator();
 		while (iterator.hasNext()) {
 			Item item = iterator.next();
 			item.moveDown();
