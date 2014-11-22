@@ -14,6 +14,7 @@ public class Resources {
     private Sound dropSound;
     private Music rainMusic;
     private Texture blankImage;
+    private Texture backgroundImage;
 
     public Resources() {
         itemTextures = new HashMap<String, Texture>();
@@ -21,6 +22,7 @@ public class Resources {
             itemTextures.put(file.nameWithoutExtension(), new Texture(file));
         }
         blankImage = new Texture(Gdx.files.internal("none.png"));
+        backgroundImage = new Texture(Gdx.files.internal("background.png"));
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
         rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
     }
@@ -31,6 +33,10 @@ public class Resources {
         } else {
             return blankImage;
         }
+    }
+
+    public Texture backgroundImage() {
+        return backgroundImage;
     }
 
     public Sound dropSound() {

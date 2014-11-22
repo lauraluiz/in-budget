@@ -20,6 +20,7 @@ public class GameScreen extends BaseScreen {
 
 	@Override
 	public void renderBatch() {
+		draw(resources().backgroundImage(), 0, 0);
 		write("Items in cue: " + availableItems.size, 100, 100);
 		for (Item item : displayedItems) {
 			drawItem(item);
