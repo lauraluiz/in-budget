@@ -30,8 +30,8 @@ public class GameScreen extends BaseScreen {
 		for (Item item : displayedItems) {
 			drawItem(item);
 		}
-		drawTopMenu(availableItems.size);
-		drawBottomMenu();
+		drawTopMenu(1, availableItems.size);
+		drawBottomMenu(purchasedItems);
 	}
 
 	@Override

@@ -80,7 +80,7 @@ public abstract class BaseScreen implements Screen {
 
     protected void drawItem(Item item) {
         draw(item);
-        draw(resources().priceTagImage(), item.x(), item.y());
+        draw(resources().priceTagImage(), item.x() - 12, item.y() - 20);
         write(item.price(), Color.BLACK, 1, item.x(), item.y() + 10);
     }
 
@@ -88,15 +88,21 @@ public abstract class BaseScreen implements Screen {
         draw(resources().backgroundImage(), 0, 0);
     }
 
-    protected void drawTopMenu(int itemsLeft) {
+    protected void drawTopMenu(int round, int itemsLeft) {
         Texture texture = resources().topMenuImage();
         draw(texture, (VIEWPORT_WIDTH - texture.getWidth())/2, VIEWPORT_HEIGHT - texture.getHeight());
+        write(String.valueOf(round), Color.DARK_GRAY, 2, 155, VIEWPORT_HEIGHT - 22);
         write(String.valueOf(itemsLeft), Color.OLIVE, 2, VIEWPORT_WIDTH / 2 - 25, VIEWPORT_HEIGHT - 35);
     }
 
-    protected void drawBottomMenu() {
+    protected void drawBottomMenu(Array<Item> purchasedItems) {
         Texture texture = resources().bottomMenuImage();
         draw(texture, VIEWPORT_WIDTH - texture.getWidth(), 0);
+        int i = 0;
+        for (Item item : purchasedItems) {
+            draw(item.texture(), 132 + 100 * i, 22);
+            i++;
+        }
     }
 
     protected Vector3 touchPosition() {
