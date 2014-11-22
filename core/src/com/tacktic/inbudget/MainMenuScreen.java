@@ -14,8 +14,8 @@ public class MainMenuScreen extends BaseScreen {
 
     @Override
     public void renderBatch() {
-        write("Welcome to In Budget!", Color.BLACK, 2, 100, 150);
-        write("Tap anywhere to begin", Color.BLACK, 2, 100, 100);
+        write("In Budget!", Color.BLACK, 2, VIEWPORT_WIDTH/2 - 100, VIEWPORT_HEIGHT/2);
+        write("Tap anywhere to begin", Color.BLACK, 1, VIEWPORT_WIDTH/2 - 100, VIEWPORT_HEIGHT/2 - 100);
     }
 
     @Override

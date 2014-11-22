@@ -5,18 +5,21 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
+import java.util.function.Consumer;
 
 public class GameScreen extends BaseScreen {
 	private Array<Item> availableItems;
 	private Array<Item> displayedItems;
 	private Array<Item> purchasedItems;
-	private long budget = 10000L;
+	private BigDecimal budget;
 	private long lastDropTime;
 	private int spawnInterval = 1000000000;
 
-	public GameScreen(InBudget game, Array<Item> allItems) {
+	public GameScreen(InBudget game, Array<Item> allItems, BigDecimal budget) {
 		super(game);
+		this.budget = budget;
 		this.availableItems = allItems;
 		this.availableItems.shuffle();
 		this.displayedItems = new Array<Item>();
@@ -36,12 +39,21 @@ public class GameScreen extends BaseScreen {
 
 	@Override
 	public void renderActions() {
-		moveItems();
-		if (TimeUtils.nanoTime() - lastDropTime > spawnInterval) {
-			spawnItem();
-		}
-		if (spawnInterval > 0) {
-			spawnInterval -= 100000;
+		if (availableItems.size < 1 && displayedItems.size < 1) {
+			calculatePrice(purchasedItems).thenAccept(new Consumer<BigDecimal>() {
+				@Override
+				public void accept(final BigDecimal totalPrice) {
+					moveToResultScreen(budget, totalPrice);
+				}
+			});
+		} else {
+			moveItems();
+			if (TimeUtils.nanoTime() - lastDropTime > spawnInterval) {
+				spawnItem();
+			}
+			if (spawnInterval > 0) {
+				spawnInterval -= 100000;
+			}
 		}
 	}
 

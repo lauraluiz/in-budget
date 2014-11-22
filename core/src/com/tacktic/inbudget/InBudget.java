@@ -6,10 +6,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import io.sphere.sdk.carts.Cart;
+import io.sphere.sdk.carts.CartDraft;
+import io.sphere.sdk.carts.commands.CartCreateCommand;
+import io.sphere.sdk.carts.commands.CartUpdateCommand;
+import io.sphere.sdk.carts.commands.updateactions.AddLineItem;
 import io.sphere.sdk.categories.Category;
 import io.sphere.sdk.categories.queries.CategoryQuery;
 import io.sphere.sdk.client.JavaClient;
 import io.sphere.sdk.client.JavaClientImpl;
+import io.sphere.sdk.commands.UpdateAction;
 import io.sphere.sdk.products.ProductProjection;
 import io.sphere.sdk.products.search.ProductProjectionSearch;
 import io.sphere.sdk.queries.PagedQueryResult;
@@ -17,10 +23,12 @@ import io.sphere.sdk.queries.Query;
 import io.sphere.sdk.search.FilterExpression;
 import io.sphere.sdk.search.PagedSearchResult;
 import io.sphere.sdk.search.SearchDsl;
+import org.javamoney.moneta.CurrencyUnitBuilder;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.money.CurrencyContext;
+import javax.money.CurrencyUnit;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
@@ -57,6 +65,15 @@ public class InBudget extends Game {
                     throw new RuntimeException("Requested round " + round + ", only " + categories.size());
                 }
                 return fetchItems(categories.get(round - 1));
+            }
+        });
+    }
+
+    public CompletableFuture<BigDecimal> fetchTotalPrice(Array<Item> items) {
+        return createCart(items).thenApply(new Function<Cart, BigDecimal>() {
+            @Override
+            public BigDecimal apply(final Cart cart) {
+                return new BigDecimal(cart.getTotalPrice().getNumber().doubleValueExact());
             }
         });
     }
@@ -122,6 +139,21 @@ public class InBudget extends Game {
                     items.add(new Item(product, resources()));
                 }
                 return items;
+            }
+        });
+    }
+
+    private CompletableFuture<Cart> createCart(final Array<Item> items) {
+        CurrencyUnit currency = CurrencyUnitBuilder.of("EUR", CurrencyContext.KEY_TIMESTAMP).build();
+        CartCreateCommand command = new CartCreateCommand(CartDraft.of(currency));
+        return sphere.execute(command).thenCompose(new Function<Cart, CompletableFuture<Cart>>() {
+            @Override
+            public CompletableFuture<Cart> apply(final Cart cart) {
+                List<UpdateAction<Cart>> actions = new ArrayList<UpdateAction<Cart>>();
+                for (Item item : items) {
+                    actions.add(AddLineItem.of(item.productId(), 1, 1));
+                }
+                return sphere.execute(new CartUpdateCommand(cart, actions));
             }
         });
     }

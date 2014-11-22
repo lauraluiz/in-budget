@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
+import java.math.BigDecimal;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class BaseScreen implements Screen {
@@ -34,6 +35,10 @@ public abstract class BaseScreen implements Screen {
         return game.fetchRound(round);
     }
 
+    public CompletableFuture<BigDecimal> calculatePrice(Array<Item> items) {
+        return game.fetchTotalPrice(items);
+    }
+
     @Override
     public final void render(float delta) {
         renderBackground();
@@ -55,12 +60,17 @@ public abstract class BaseScreen implements Screen {
     abstract void renderActions();
 
     protected void moveToGameScreen(Array<Item> items) {
-        game.setScreen(new GameScreen(game, items));
+        game.setScreen(new GameScreen(game, items, new BigDecimal(250)));
         dispose();
     }
 
     protected void moveToMainMenuScreen() {
         game.setScreen(new MainMenuScreen(game));
+        dispose();
+    }
+
+    protected void moveToResultScreen(BigDecimal budget, BigDecimal totalPrice) {
+        game.setScreen(new ResultScreen(game, budget, totalPrice));
         dispose();
     }
 

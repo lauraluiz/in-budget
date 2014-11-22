@@ -11,12 +11,14 @@ import static com.tacktic.inbudget.BaseScreen.*;
 import static java.util.Locale.ENGLISH;
 
 public class Item extends GameElement {
+    private final String productId;
     private final Texture texture;
     private final Rectangle item;
     private final MonetaryAmount price;
 
     public Item(ProductProjection product, Resources resources) {
         String slug = product.getSlug().get(ENGLISH).orElse("");
+        productId = product.getId();
         texture = resources.itemImage(slug);
         item = new Rectangle();
         item.width = texture.getWidth();
@@ -34,6 +36,10 @@ public class Item extends GameElement {
     @Override
     Rectangle box() {
         return item;
+    }
+
+    public String productId() {
+        return productId;
     }
 
     public String price() {
