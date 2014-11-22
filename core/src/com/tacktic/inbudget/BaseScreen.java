@@ -60,7 +60,7 @@ public abstract class BaseScreen implements Screen {
     abstract void renderActions();
 
     protected void moveToGameScreen(Array<Item> items) {
-        game.setScreen(new GameScreen(game, items, new BigDecimal(250)));
+        game.setScreen(new GameScreen(game, items, new BigDecimal(2500)));
         dispose();
     }
 
@@ -106,11 +106,12 @@ public abstract class BaseScreen implements Screen {
         draw(resources().resultBackgroundImage(), 0, 0);
     }
 
-    protected void drawTopMenu(int round, int itemsLeft) {
+    protected void drawTopMenu(int round, int itemsLeft, BigDecimal budget) {
         Texture texture = resources().topMenuImage();
         draw(texture, (VIEWPORT_WIDTH - texture.getWidth())/2, VIEWPORT_HEIGHT - texture.getHeight());
         write(String.valueOf(round), Color.DARK_GRAY, 2, 155, VIEWPORT_HEIGHT - 22);
         write(String.valueOf(itemsLeft), Color.OLIVE, 2, VIEWPORT_WIDTH / 2 - 25, VIEWPORT_HEIGHT - 35);
+        write("$" + budget.toPlainString(), Color.DARK_GRAY, 2, VIEWPORT_WIDTH / 2 + 100, VIEWPORT_HEIGHT - 22);
     }
 
     protected void drawBottomMenu(Array<Item> purchasedItems) {

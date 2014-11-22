@@ -35,7 +35,7 @@ public class GameScreen extends BaseScreen {
 		for (Item item : displayedItems) {
 			drawItem(item);
 		}
-		drawTopMenu(1, availableItems.size);
+		drawTopMenu(1, availableItems.size, budget);
 		drawGirl(girl);
 		drawBottomMenu(purchasedItems);
 	}
