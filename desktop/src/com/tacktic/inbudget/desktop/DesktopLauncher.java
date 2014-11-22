@@ -9,7 +9,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "In Budget!";
 		config.width = 640;
-		config.height = 960;
+		config.height = 800;
 		new LwjglApplication(new InBudget(), config);
 	}
 }

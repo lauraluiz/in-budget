@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class BaseScreen implements Screen {
     public static final int VIEWPORT_WIDTH = 640;
-    public static final int VIEWPORT_HEIGHT = 960;
+    public static final int VIEWPORT_HEIGHT = 800;
 
     private final InBudget game;
     private final OrthographicCamera camera;
@@ -43,7 +44,7 @@ public abstract class BaseScreen implements Screen {
     }
 
     protected void renderBackground() {
-        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+        Gdx.gl.glClearColor(1f, 1f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
@@ -63,6 +64,10 @@ public abstract class BaseScreen implements Screen {
 
     protected void write(String text, float x, float y) {
         game.font().draw(game.batch(), text, x, y);
+    }
+
+    protected void draw(Texture texture, float x, float y) {
+        game.batch().draw(texture, x, y);
     }
 
     protected void draw(GameElement element) {
