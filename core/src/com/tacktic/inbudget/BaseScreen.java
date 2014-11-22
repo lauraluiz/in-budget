@@ -88,6 +88,10 @@ public abstract class BaseScreen implements Screen {
         game.batch().draw(element.texture(), element.x(), element.y());
     }
 
+    protected void drawGirl(Girl girl) {
+        game.batch().draw(girl.nextFrame(), -20, 0);
+    }
+
     protected void drawItem(Item item) {
         draw(item);
         draw(resources().priceTagImage(), item.x() - 12, item.y() - 20);

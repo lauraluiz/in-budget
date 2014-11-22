@@ -13,6 +13,7 @@ public class Resources {
     private final Texture backgroundImage;
     private final Texture topMenuImage;
     private final Texture bottomMenuImage;
+    private final Texture girlImage;
     private final Map<String, Texture> itemTextures;
     private final Texture priceTagImage;
     private final Sound dropSound;
@@ -30,6 +31,7 @@ public class Resources {
         topMenuImage = new Texture(Gdx.files.internal("background-layer3.png"));
         bottomMenuImage = new Texture(Gdx.files.internal("background-layer2.png"));
         resultBackgroundImage = new Texture(Gdx.files.internal("background-layer4.png"));
+        girlImage = new Texture(Gdx.files.internal("girl.png"));
         priceTagImage = new Texture(Gdx.files.internal("tag.png"));
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
         rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
@@ -41,6 +43,10 @@ public class Resources {
         } else {
             return blankImage;
         }
+    }
+
+    public Texture girlImage() {
+        return girlImage;
     }
 
     public Texture backgroundImage() {

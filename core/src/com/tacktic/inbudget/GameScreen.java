@@ -13,12 +13,14 @@ public class GameScreen extends BaseScreen {
 	private Array<Item> availableItems;
 	private Array<Item> displayedItems;
 	private Array<Item> purchasedItems;
+	private Girl girl;
 	private BigDecimal budget;
 	private long lastDropTime;
 	private int spawnInterval = 1000000000;
 
 	public GameScreen(InBudget game, Array<Item> allItems, BigDecimal budget) {
 		super(game);
+		this.girl = new Girl(resources());
 		this.budget = budget;
 		this.availableItems = allItems;
 		this.availableItems.shuffle();
@@ -34,6 +36,7 @@ public class GameScreen extends BaseScreen {
 			drawItem(item);
 		}
 		drawTopMenu(1, availableItems.size);
+		drawGirl(girl);
 		drawBottomMenu(purchasedItems);
 	}
 
