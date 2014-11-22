@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import io.sphere.sdk.products.ProductProjection;
 
+import javax.money.MonetaryAmount;
+
 import static com.tacktic.inbudget.BaseScreen.VIEWPORT_HEIGHT;
 import static com.tacktic.inbudget.BaseScreen.VIEWPORT_WIDTH;
 import static java.util.Locale.ENGLISH;
@@ -12,6 +14,7 @@ import static java.util.Locale.ENGLISH;
 public class Item extends GameElement {
     private final Texture texture;
     private final Rectangle item;
+    private final MonetaryAmount price;
 
     public Item(ProductProjection product, Resources resources) {
         String slug = product.getSlug().get(ENGLISH).orElse("");
@@ -21,6 +24,7 @@ public class Item extends GameElement {
         item.height = texture.getHeight();
         item.x = MathUtils.random(0, VIEWPORT_WIDTH - item.width);
         item.y = VIEWPORT_HEIGHT;
+        price = product.getMasterVariant().getPrices().get(0).getValue();
     }
 
     @Override
@@ -31,6 +35,11 @@ public class Item extends GameElement {
     @Override
     Rectangle box() {
         return item;
+    }
+
+    public String price() {
+        String textValue = String.valueOf(price.getNumber().intValueExact());
+        return textValue + " €";
     }
 
     public void playSound() {

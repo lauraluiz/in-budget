@@ -15,13 +15,14 @@ public class GameScreen extends BaseScreen {
 		super(game);
 		this.availableItems = allItems;
 		this.displayedItems = new Array<Item>();
+		this.lastDropTime = TimeUtils.nanoTime();
 	}
 
 	@Override
 	public void renderBatch() {
 		write("Items in cue: " + availableItems.size, 100, 100);
 		for (Item item : displayedItems) {
-			draw(item);
+			drawItem(item);
 		}
 	}
 
