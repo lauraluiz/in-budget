@@ -18,9 +18,10 @@ public class ResultScreen extends BaseScreen {
 
     @Override
     public void renderBatch() {
-        write("Budget: $" + String.valueOf(budget), Color.BLACK, 2, VIEWPORT_WIDTH/2 - 100, VIEWPORT_HEIGHT - 100);
-        write("Purchased $" + totalPrice.toString(), Color.BLACK, 2, VIEWPORT_WIDTH/2 - 100, VIEWPORT_HEIGHT - 200);
-        write("Accuracy ratio: " + percentage.movePointRight(2) + "%", Color.BLACK, 2, VIEWPORT_WIDTH/2 - 100, VIEWPORT_HEIGHT - 300);
+        drawResultBackground();
+        write("$" + String.valueOf(budget), Color.BLACK, 2, VIEWPORT_WIDTH/2 - 250, VIEWPORT_HEIGHT - 100);
+        write("$" + totalPrice.toString(), Color.BLACK, 2, VIEWPORT_WIDTH/2 - 100, VIEWPORT_HEIGHT - 200);
+        write("" + percentage.movePointRight(2) + "%", Color.BLACK, 2, VIEWPORT_WIDTH/2 - 100, VIEWPORT_HEIGHT - 300);
     }
 
     @Override

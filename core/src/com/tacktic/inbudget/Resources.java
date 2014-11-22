@@ -18,6 +18,7 @@ public class Resources {
     private final Sound dropSound;
     private final Music rainMusic;
     private final Texture blankImage;
+    private Texture resultBackgroundImage;
 
     public Resources() {
         itemTextures = new HashMap<String, Texture>();
@@ -28,6 +29,7 @@ public class Resources {
         backgroundImage = new Texture(Gdx.files.internal("background-layer1.png"));
         topMenuImage = new Texture(Gdx.files.internal("background-layer3.png"));
         bottomMenuImage = new Texture(Gdx.files.internal("background-layer2.png"));
+        resultBackgroundImage = new Texture(Gdx.files.internal("background-layer4.png"));
         priceTagImage = new Texture(Gdx.files.internal("tag.png"));
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
         rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
@@ -43,6 +45,10 @@ public class Resources {
 
     public Texture backgroundImage() {
         return backgroundImage;
+    }
+
+    public Texture resultBackgroundImage() {
+        return resultBackgroundImage;
     }
 
     public Texture topMenuImage() {
@@ -72,6 +78,7 @@ public class Resources {
         }
         itemTextures.clear();
         backgroundImage.dispose();
+        resultBackgroundImage.dispose();
         topMenuImage.dispose();
         bottomMenuImage.dispose();
         dropSound.dispose();

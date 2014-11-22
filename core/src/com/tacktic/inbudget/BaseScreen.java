@@ -98,6 +98,10 @@ public abstract class BaseScreen implements Screen {
         draw(resources().backgroundImage(), 0, 0);
     }
 
+    protected void drawResultBackground() {
+        draw(resources().resultBackgroundImage(), 0, 0);
+    }
+
     protected void drawTopMenu(int round, int itemsLeft) {
         Texture texture = resources().topMenuImage();
         draw(texture, (VIEWPORT_WIDTH - texture.getWidth())/2, VIEWPORT_HEIGHT - texture.getHeight());
