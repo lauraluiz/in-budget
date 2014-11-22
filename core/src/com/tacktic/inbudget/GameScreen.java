@@ -13,13 +13,13 @@ public class GameScreen extends BaseScreen {
 
 	public GameScreen(InBudget game, Array<Item> allItems) {
 		super(game);
-		resources().playBackgroundMusic();
 		this.availableItems = allItems;
 		this.displayedItems = new Array<Item>();
 	}
 
 	@Override
 	public void renderBatch() {
+		write("Items in cue: " + availableItems.size, 100, 100);
 		for (Item item : displayedItems) {
 			draw(item);
 		}
