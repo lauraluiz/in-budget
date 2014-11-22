@@ -2,6 +2,7 @@ package com.tacktic.inbudget;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,6 +14,7 @@ import java.util.concurrent.CompletableFuture;
 public abstract class BaseScreen implements Screen {
     public static final int VIEWPORT_WIDTH = 640;
     public static final int VIEWPORT_HEIGHT = 800;
+    public static final int VIEWPORT_MARGIN = 70;
 
     private final InBudget game;
     private final OrthographicCamera camera;
@@ -62,7 +64,9 @@ public abstract class BaseScreen implements Screen {
         dispose();
     }
 
-    protected void write(String text, float x, float y) {
+    protected void write(String text, Color color, float size, float x, float y) {
+        game.font().setColor(color);
+        game.font().setScale(size);
         game.font().draw(game.batch(), text, x, y);
     }
 
@@ -76,7 +80,22 @@ public abstract class BaseScreen implements Screen {
 
     protected void drawItem(Item item) {
         draw(item);
-        write(item.price(), item.x(), item.y());
+        write(item.price(), Color.BLACK, 1, item.x(), item.y());
+    }
+
+    protected void drawBackground() {
+        draw(resources().backgroundImage(), 0, 0);
+    }
+
+    protected void drawTopMenu(int itemsLeft) {
+        Texture texture = resources().topMenuImage();
+        draw(texture, (VIEWPORT_WIDTH - texture.getWidth())/2, VIEWPORT_HEIGHT - texture.getHeight());
+        write(String.valueOf(itemsLeft), Color.OLIVE, 2, VIEWPORT_WIDTH / 2 - 25, VIEWPORT_HEIGHT - 35);
+    }
+
+    protected void drawBottomMenu() {
+        Texture texture = resources().bottomMenuImage();
+        draw(texture, VIEWPORT_WIDTH - texture.getWidth(), 0);
     }
 
     protected Vector3 touchPosition() {

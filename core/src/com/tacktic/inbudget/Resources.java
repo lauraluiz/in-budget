@@ -10,11 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Resources {
-    private Map<String, Texture> itemTextures;
-    private Sound dropSound;
-    private Music rainMusic;
-    private Texture blankImage;
-    private Texture backgroundImage;
+    private final Texture topMenuImage;
+    private final Texture bottomMenuImage;
+    private final Map<String, Texture> itemTextures;
+    private final Sound dropSound;
+    private final Music rainMusic;
+    private final Texture blankImage;
+    private final Texture backgroundImage;
 
     public Resources() {
         itemTextures = new HashMap<String, Texture>();
@@ -22,7 +24,9 @@ public class Resources {
             itemTextures.put(file.nameWithoutExtension(), new Texture(file));
         }
         blankImage = new Texture(Gdx.files.internal("none.png"));
-        backgroundImage = new Texture(Gdx.files.internal("background.png"));
+        backgroundImage = new Texture(Gdx.files.internal("background-layer1.png"));
+        topMenuImage = new Texture(Gdx.files.internal("background-layer3.png"));
+        bottomMenuImage = new Texture(Gdx.files.internal("background-layer2.png"));
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
         rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
     }
@@ -39,6 +43,14 @@ public class Resources {
         return backgroundImage;
     }
 
+    public Texture topMenuImage() {
+        return topMenuImage;
+    }
+
+    public Texture bottomMenuImage() {
+        return bottomMenuImage;
+    }
+
     public Sound dropSound() {
         return dropSound;
     }
@@ -53,6 +65,9 @@ public class Resources {
             texture.dispose();
         }
         itemTextures.clear();
+        backgroundImage.dispose();
+        topMenuImage.dispose();
+        bottomMenuImage.dispose();
         dropSound.dispose();
         rainMusic.dispose();
     }

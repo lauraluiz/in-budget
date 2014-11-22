@@ -7,8 +7,7 @@ import io.sphere.sdk.products.ProductProjection;
 
 import javax.money.MonetaryAmount;
 
-import static com.tacktic.inbudget.BaseScreen.VIEWPORT_HEIGHT;
-import static com.tacktic.inbudget.BaseScreen.VIEWPORT_WIDTH;
+import static com.tacktic.inbudget.BaseScreen.*;
 import static java.util.Locale.ENGLISH;
 
 public class Item extends GameElement {
@@ -22,7 +21,7 @@ public class Item extends GameElement {
         item = new Rectangle();
         item.width = texture.getWidth();
         item.height = texture.getHeight();
-        item.x = MathUtils.random(0, VIEWPORT_WIDTH - item.width);
+        item.x = MathUtils.random(VIEWPORT_MARGIN, VIEWPORT_WIDTH - item.width - VIEWPORT_MARGIN);
         item.y = VIEWPORT_HEIGHT;
         price = product.getMasterVariant().getPrices().get(0).getValue();
     }
@@ -39,7 +38,7 @@ public class Item extends GameElement {
 
     public String price() {
         String textValue = String.valueOf(price.getNumber().intValueExact());
-        return textValue + " €";
+        return "$" + textValue;
     }
 
     public void playSound() {

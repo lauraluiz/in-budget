@@ -117,6 +117,9 @@ public class InBudget extends Game {
                 Array<Item> items = new Array<Item>();
                 for (ProductProjection product : result.getResults()) {
                     items.add(new Item(product, resources()));
+                    items.add(new Item(product, resources()));
+                    items.add(new Item(product, resources()));
+                    items.add(new Item(product, resources()));
                 }
                 return items;
             }

@@ -1,6 +1,7 @@
 package com.tacktic.inbudget;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.function.Consumer;
@@ -13,8 +14,8 @@ public class MainMenuScreen extends BaseScreen {
 
     @Override
     public void renderBatch() {
-        write("Welcome to In Budget!", 100, 150);
-        write("Tap anywhere to begin", 100, 100);
+        write("Welcome to In Budget!", Color.BLACK, 2, 100, 150);
+        write("Tap anywhere to begin", Color.BLACK, 2, 100, 100);
     }
 
     @Override

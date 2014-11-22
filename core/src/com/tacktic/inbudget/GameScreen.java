@@ -14,17 +14,19 @@ public class GameScreen extends BaseScreen {
 	public GameScreen(InBudget game, Array<Item> allItems) {
 		super(game);
 		this.availableItems = allItems;
+		this.availableItems.shuffle();
 		this.displayedItems = new Array<Item>();
 		this.lastDropTime = TimeUtils.nanoTime();
 	}
 
 	@Override
 	public void renderBatch() {
-		draw(resources().backgroundImage(), 0, 0);
-		write(String.valueOf(availableItems.size), VIEWPORT_WIDTH/2  - 20, VIEWPORT_HEIGHT - 20);
+		drawBackground();
 		for (Item item : displayedItems) {
 			drawItem(item);
 		}
+		drawTopMenu(availableItems.size);
+		drawBottomMenu();
 	}
 
 	@Override
