@@ -69,6 +69,11 @@ public abstract class BaseScreen implements Screen {
         game.batch().draw(element.texture(), element.x(), element.y());
     }
 
+    protected void drawItem(Item item) {
+        draw(item);
+        write(item.price(), item.x(), item.y());
+    }
+
     protected Vector3 touchPosition() {
         touchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(touchPosition);
