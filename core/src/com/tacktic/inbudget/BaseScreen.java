@@ -80,7 +80,8 @@ public abstract class BaseScreen implements Screen {
 
     protected void drawItem(Item item) {
         draw(item);
-        write(item.price(), Color.BLACK, 1, item.x(), item.y());
+        draw(resources().priceTagImage(), item.x(), item.y());
+        write(item.price(), Color.BLACK, 1, item.x(), item.y() + 10);
     }
 
     protected void drawBackground() {

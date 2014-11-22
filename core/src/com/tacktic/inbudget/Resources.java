@@ -10,13 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Resources {
+    private final Texture backgroundImage;
     private final Texture topMenuImage;
     private final Texture bottomMenuImage;
     private final Map<String, Texture> itemTextures;
+    private final Texture priceTagImage;
     private final Sound dropSound;
     private final Music rainMusic;
     private final Texture blankImage;
-    private final Texture backgroundImage;
 
     public Resources() {
         itemTextures = new HashMap<String, Texture>();
@@ -27,6 +28,7 @@ public class Resources {
         backgroundImage = new Texture(Gdx.files.internal("background-layer1.png"));
         topMenuImage = new Texture(Gdx.files.internal("background-layer3.png"));
         bottomMenuImage = new Texture(Gdx.files.internal("background-layer2.png"));
+        priceTagImage = new Texture(Gdx.files.internal("tag.png"));
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
         rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
     }
@@ -49,6 +51,10 @@ public class Resources {
 
     public Texture bottomMenuImage() {
         return bottomMenuImage;
+    }
+
+    public Texture priceTagImage() {
+        return priceTagImage;
     }
 
     public Sound dropSound() {
