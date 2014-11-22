@@ -32,7 +32,6 @@ public class InBudget extends Game {
     private BitmapFont font;
     private JavaClient sphere;
     private CompletableFuture<List<Category>> rounds;
-    private CompletableFuture<Array<Item>> roundItems;
 
     public Resources resources() {
         return resources;
@@ -50,16 +49,8 @@ public class InBudget extends Game {
         return sphere;
     }
 
-    public void changeRound(final int round) {
-        roundItems = fetchRound(round);
-    }
-
     public CompletableFuture<List<Category>> rounds() {
         return rounds;
-    }
-
-    public CompletableFuture<Array<Item>> roundItems() {
-        return roundItems;
     }
 
     public CompletableFuture<Array<Item>> fetchRound(final int round) {
@@ -81,7 +72,6 @@ public class InBudget extends Game {
         font = new BitmapFont();
         sphere = createSphereClient();
         rounds = fetchRounds();
-        changeRound(1);
         this.setScreen(new MainMenuScreen(this));
     }
 
