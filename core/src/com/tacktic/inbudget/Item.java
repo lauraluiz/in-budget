@@ -25,6 +25,9 @@ public class Item extends GameElement {
         item.height = texture.getHeight();
         item.x = MathUtils.random(VIEWPORT_MARGIN, VIEWPORT_WIDTH - item.width - VIEWPORT_MARGIN);
         item.y = VIEWPORT_HEIGHT;
+        if (product.getMasterVariant().getPrices().isEmpty()) {
+            throw new RuntimeException("Product without prices " + productId);
+        }
         price = product.getMasterVariant().getPrices().get(0).getValue();
     }
 
