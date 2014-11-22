@@ -1,5 +1,7 @@
 package com.tacktic.inbudget;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -8,6 +10,8 @@ import java.util.Iterator;
 public class GameScreen extends BaseScreen {
 	private Array<Item> availableItems;
 	private Array<Item> displayedItems;
+	private Array<Item> purchasedItems;
+	private long budget = 10000L;
 	private long lastDropTime;
 	private int spawnInterval = 1000000000;
 
@@ -16,6 +20,7 @@ public class GameScreen extends BaseScreen {
 		this.availableItems = allItems;
 		this.availableItems.shuffle();
 		this.displayedItems = new Array<Item>();
+		this.purchasedItems = new Array<Item>();
 		this.lastDropTime = TimeUtils.nanoTime();
 	}
 
@@ -81,6 +86,13 @@ public class GameScreen extends BaseScreen {
 		Iterator<Item> iterator = displayedItems.iterator();
 		while (iterator.hasNext()) {
 			Item item = iterator.next();
+			if (Gdx.input.isTouched()) {
+				Vector3 touchPosition = touchPosition();
+				if (item.box().contains(touchPosition.x, touchPosition.y)) {
+					purchasedItems.add(item);
+					iterator.remove();
+				}
+			}
 			item.moveDown();
 			if (item.outOfScreen()) {
 				iterator.remove();
