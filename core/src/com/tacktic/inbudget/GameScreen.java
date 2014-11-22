@@ -16,7 +16,7 @@ public class GameScreen extends BaseScreen {
 	private Girl girl;
 	private BigDecimal budget;
 	private long lastDropTime;
-	private int spawnInterval = 1000000000;
+	private long spawnInterval = 2000000000L;
 
 	public GameScreen(InBudget game, Array<Item> allItems, BigDecimal budget) {
 		super(game);

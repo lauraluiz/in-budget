@@ -135,7 +135,6 @@ public class InBudget extends Game {
                 for (ProductProjection product : result.getResults()) {
                     items.add(new Item(product, resources()));
                     items.add(new Item(product, resources()));
-                    items.add(new Item(product, resources()));
                 }
                 return items;
             }
