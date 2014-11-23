@@ -17,7 +17,7 @@ public class Resources {
     private final Map<String, Texture> itemTextures;
     private final Texture priceTagImage;
     private final Sound dropSound;
-    private final Music rainMusic;
+    private final Music pianoMusic;
     private final Texture blankImage;
     private Texture resultBackgroundImage;
 
@@ -34,7 +34,8 @@ public class Resources {
         girlImage = new Texture(Gdx.files.internal("girl.png"));
         priceTagImage = new Texture(Gdx.files.internal("tag.png"));
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
-        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
+        pianoMusic = Gdx.audio.newMusic(Gdx.files.internal("music.wav"));
+        pianoMusic.setLooping(true);
     }
 
     public Texture itemImage(String itemId) {
@@ -73,9 +74,8 @@ public class Resources {
         return dropSound;
     }
 
-    public void playBackgroundMusic() {
-        rainMusic.setLooping(true);
-        rainMusic.play();
+    public Music gameMusic() {
+        return pianoMusic;
     }
 
     public void dispose() {
@@ -88,6 +88,6 @@ public class Resources {
         topMenuImage.dispose();
         bottomMenuImage.dispose();
         dropSound.dispose();
-        rainMusic.dispose();
+        pianoMusic.dispose();
     }
 }

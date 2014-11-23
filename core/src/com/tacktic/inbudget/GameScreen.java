@@ -29,6 +29,7 @@ public class GameScreen extends BaseScreen {
 		this.purchasedItems = new Array<Item>();
 		this.lastDropTime = TimeUtils.nanoTime();
 		this.loadingResult = false;
+		resources().gameMusic().play();
 	}
 
 	@Override
@@ -100,7 +101,7 @@ public class GameScreen extends BaseScreen {
 
 	@Override
 	public void dispose() {
-
+		resources().gameMusic().stop();
 	}
 
 	private void spawnItem() {
@@ -118,6 +119,7 @@ public class GameScreen extends BaseScreen {
 				Vector3 touchPosition = touchPosition();
 				if (item.box().contains(touchPosition.x, touchPosition.y)) {
 					purchasedItems.add(item);
+					resources().dropSound().play();
 					iterator.remove();
 				}
 			}
