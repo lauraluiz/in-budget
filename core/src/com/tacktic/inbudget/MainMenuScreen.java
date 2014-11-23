@@ -7,9 +7,11 @@ import com.badlogic.gdx.utils.Array;
 import java.util.function.Consumer;
 
 public class MainMenuScreen extends BaseScreen {
+    private boolean loadingRound;
 
     public MainMenuScreen(InBudget game) {
         super(game);
+        loadingRound = false;
     }
 
     @Override
@@ -20,7 +22,8 @@ public class MainMenuScreen extends BaseScreen {
 
     @Override
     public void renderActions() {
-        if (Gdx.input.isTouched()) {
+        if (Gdx.input.isTouched() && !loadingRound) {
+            loadingRound = true;
             changeRound(1).thenAccept(new Consumer<Array<Item>>() {
                 @Override
                 public void accept(final Array<Item> items) {

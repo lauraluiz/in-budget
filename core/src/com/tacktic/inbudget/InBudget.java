@@ -30,6 +30,9 @@ import javax.money.CurrencyUnit;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static io.sphere.sdk.products.ProductProjectionType.CURRENT;
@@ -40,6 +43,29 @@ public class InBudget extends Game {
     private BitmapFont font;
     private JavaClient sphere;
     private CompletableFuture<List<Category>> rounds;
+
+    @Override
+    public void create() {
+        resources = new Resources();
+        batch = new SpriteBatch();
+        font = new BitmapFont();
+        sphere = createSphereClient();
+        rounds = fetchRounds();
+        this.setScreen(new MainMenuScreen(this));
+    }
+
+    @Override
+    public void render() {
+        super.render();
+    }
+
+    @Override
+    public void dispose() {
+        resources.dispose();
+        batch.dispose();
+        font.dispose();
+        sphere.close();
+    }
 
     public Resources resources() {
         return resources;
@@ -66,39 +92,31 @@ public class InBudget extends Game {
                 }
                 return fetchItems(categories.get(round - 1));
             }
-        });
-    }
-
-    public CompletableFuture<BigDecimal> fetchTotalPrice(Array<Item> items) {
-        return createCart(items).thenApply(new Function<Cart, BigDecimal>() {
+        }).exceptionally(new Function<Throwable, Array<Item>>() {
             @Override
-            public BigDecimal apply(final Cart cart) {
-                return new BigDecimal(cart.getTotalPrice().getNumber().doubleValueExact());
+            public Array<Item> apply(final Throwable throwable) {
+                throw new RuntimeException(throwable);
             }
         });
     }
 
-    @Override
-    public void create() {
-        resources = new Resources();
-        batch = new SpriteBatch();
-        font = new BitmapFont();
-        sphere = createSphereClient();
-        rounds = fetchRounds();
-        this.setScreen(new MainMenuScreen(this));
-    }
-
-    @Override
-    public void render() {
-        super.render();
-    }
-
-    @Override
-    public void dispose() {
-        resources.dispose();
-        batch.dispose();
-        font.dispose();
-        sphere.close();
+    public CompletableFuture<BigDecimal> fetchTotalPrice(final Array<Item> items) {
+        return createCart().thenCompose(new Function<Cart, CompletableFuture<Cart>>() {
+            @Override
+            public CompletableFuture<Cart> apply(final Cart cart) {
+                return addToCart(cart, items);
+            }
+        }).thenApply(new Function<Cart, BigDecimal>() {
+            @Override
+            public BigDecimal apply(final Cart cart) {
+                return new BigDecimal(cart.getTotalPrice().getNumber().doubleValueExact());
+            }
+        }).exceptionally(new Function<Throwable, BigDecimal>() {
+            @Override
+            public BigDecimal apply(final Throwable throwable) {
+                throw new RuntimeException(throwable);
+            }
+        });
     }
 
     private JavaClient createSphereClient() {
@@ -114,7 +132,7 @@ public class InBudget extends Game {
 
     private CompletableFuture<List<Category>> fetchRounds() {
         final Query<Category> query = new CategoryQuery().withLimit(50);
-        return sphere.execute(query).thenApply(new Function<PagedQueryResult<Category>, List<Category>> () {
+        return sphere.execute(query).thenApply(new Function<PagedQueryResult<Category>, List<Category>>() {
             @Override
             public List<Category> apply(final PagedQueryResult<Category> result) {
                 if (result.getTotal() < 0) {
@@ -141,18 +159,23 @@ public class InBudget extends Game {
         });
     }
 
-    private CompletableFuture<Cart> createCart(final Array<Item> items) {
+    private CompletableFuture<Cart> createCart() {
         CurrencyUnit currency = CurrencyUnitBuilder.of("EUR", CurrencyContext.KEY_TIMESTAMP).build();
         CartCreateCommand command = new CartCreateCommand(CartDraft.of(currency));
-        return sphere.execute(command).thenCompose(new Function<Cart, CompletableFuture<Cart>>() {
-            @Override
-            public CompletableFuture<Cart> apply(final Cart cart) {
-                List<UpdateAction<Cart>> actions = new ArrayList<UpdateAction<Cart>>();
-                for (Item item : items) {
-                    actions.add(AddLineItem.of(item.productId(), 1, 1));
-                }
-                return sphere.execute(new CartUpdateCommand(cart, actions));
-            }
-        });
+        return sphere.execute(command);
+    }
+
+    private CompletableFuture<Cart> addToCart(final Cart cart, final Array<Item> items) {
+        List<UpdateAction<Cart>> actions = new ArrayList<UpdateAction<Cart>>();
+        for (Item item : items) {
+            actions.add(AddLineItem.of(item.productId(), 1, 1));
+        }
+        return sphere.execute(new CartUpdateCommand(cart, actions))
+                .exceptionally(new Function<Throwable, Cart>() {
+                    @Override
+                    public Cart apply(final Throwable throwable) {
+                        throw new RuntimeException(throwable);
+                    }
+                });
     }
 }

@@ -17,6 +17,7 @@ public class GameScreen extends BaseScreen {
 	private BigDecimal budget;
 	private long lastDropTime;
 	private long spawnInterval = 2000000000L;
+	private boolean loadingResult;
 
 	public GameScreen(InBudget game, Array<Item> allItems, BigDecimal budget) {
 		super(game);
@@ -27,6 +28,7 @@ public class GameScreen extends BaseScreen {
 		this.displayedItems = new Array<Item>();
 		this.purchasedItems = new Array<Item>();
 		this.lastDropTime = TimeUtils.nanoTime();
+		this.loadingResult = false;
 	}
 
 	@Override
@@ -42,22 +44,33 @@ public class GameScreen extends BaseScreen {
 
 	@Override
 	public void renderActions() {
-		if (availableItems.size < 1 && displayedItems.size < 1) {
-			calculatePrice(purchasedItems).thenAccept(new Consumer<BigDecimal>() {
-				@Override
-				public void accept(final BigDecimal totalPrice) {
-					moveToResultScreen(budget, totalPrice);
-				}
-			});
+		if (hasRoundFinished()) {
+			if (!loadingResult) {
+				loadingResult = true;
+				calculatePrice(purchasedItems).thenAccept(new Consumer<BigDecimal>() {
+					@Override
+					public void accept(final BigDecimal totalPrice) {
+						moveToResultScreen(budget, totalPrice);
+					}
+				});
+			}
 		} else {
 			moveItems();
 			if (TimeUtils.nanoTime() - lastDropTime > spawnInterval) {
 				spawnItem();
 			}
-			if (spawnInterval > 0) {
-				spawnInterval -= 100000;
-			}
+			reduceSpawnInterval();
 		}
+	}
+
+	private void reduceSpawnInterval() {
+		if (spawnInterval > 0) {
+            spawnInterval -= 100000;
+        }
+	}
+
+	private boolean hasRoundFinished() {
+		return availableItems.size < 1 && displayedItems.size < 1;
 	}
 
 	@Override
