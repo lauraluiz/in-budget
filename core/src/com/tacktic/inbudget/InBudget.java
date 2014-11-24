@@ -92,11 +92,6 @@ public class InBudget extends Game {
                 }
                 return fetchItems(categories.get(round - 1));
             }
-        }).exceptionally(new Function<Throwable, Array<Item>>() {
-            @Override
-            public Array<Item> apply(final Throwable throwable) {
-                throw new RuntimeException(throwable);
-            }
         });
     }
 
@@ -110,11 +105,6 @@ public class InBudget extends Game {
             @Override
             public BigDecimal apply(final Cart cart) {
                 return new BigDecimal(cart.getTotalPrice().getNumber().doubleValueExact());
-            }
-        }).exceptionally(new Function<Throwable, BigDecimal>() {
-            @Override
-            public BigDecimal apply(final Throwable throwable) {
-                throw new RuntimeException(throwable);
             }
         });
     }
@@ -170,12 +160,6 @@ public class InBudget extends Game {
         for (Item item : items) {
             actions.add(AddLineItem.of(item.productId(), 1, 1));
         }
-        return sphere.execute(new CartUpdateCommand(cart, actions))
-                .exceptionally(new Function<Throwable, Cart>() {
-                    @Override
-                    public Cart apply(final Throwable throwable) {
-                        throw new RuntimeException(throwable);
-                    }
-                });
+        return sphere.execute(new CartUpdateCommand(cart, actions));
     }
 }
