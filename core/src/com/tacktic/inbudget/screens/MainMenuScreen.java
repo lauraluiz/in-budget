@@ -1,10 +1,8 @@
-package com.tacktic.inbudget;
+package com.tacktic.inbudget.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.Array;
-
-import java.util.function.Consumer;
+import com.tacktic.inbudget.InBudget;
 
 public class MainMenuScreen extends BaseScreen {
     private boolean loadingRound;
@@ -22,14 +20,9 @@ public class MainMenuScreen extends BaseScreen {
 
     @Override
     public void renderActions() {
-        if (Gdx.input.isTouched() && !loadingRound) {
+        if (loadingRound || Gdx.input.isTouched()) {
             loadingRound = true;
-            changeRound(1).thenAccept(new Consumer<Array<Item>>() {
-                @Override
-                public void accept(final Array<Item> items) {
-                    moveToGameScreen(items);
-                }
-            });
+            moveToGameScreen(1);
         }
     }
 

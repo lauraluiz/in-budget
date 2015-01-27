@@ -1,9 +1,13 @@
-package com.tacktic.inbudget;
+package com.tacktic.inbudget.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.tacktic.inbudget.Girl;
+import com.tacktic.inbudget.InBudget;
+import com.tacktic.inbudget.sphere.Item;
+import com.tacktic.inbudget.sphere.Money;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
@@ -17,7 +21,6 @@ public class GameScreen extends BaseScreen {
 	private BigDecimal budget;
 	private long lastDropTime;
 	private long spawnInterval = 2000000000L;
-	private boolean loadingResult;
 
 	public GameScreen(InBudget game, Array<Item> allItems, BigDecimal budget) {
 		super(game);
@@ -28,8 +31,7 @@ public class GameScreen extends BaseScreen {
 		this.displayedItems = new Array<Item>();
 		this.purchasedItems = new Array<Item>();
 		this.lastDropTime = TimeUtils.nanoTime();
-		this.loadingResult = false;
-		resources().gameMusic().play();
+		//resources().gameMusic().play();
 	}
 
 	@Override
@@ -46,14 +48,9 @@ public class GameScreen extends BaseScreen {
 	@Override
 	public void renderActions() {
 		if (hasRoundFinished()) {
-			if (!loadingResult) {
-				loadingResult = true;
-				calculatePrice(purchasedItems).thenAccept(new Consumer<BigDecimal>() {
-					@Override
-					public void accept(final BigDecimal totalPrice) {
-						moveToResultScreen(budget, totalPrice);
-					}
-				});
+			Money price = calculatePrice(purchasedItems);
+			if (price != null) {
+				moveToResultScreen(budget, price.getAmount());
 			}
 		} else {
 			moveItems();

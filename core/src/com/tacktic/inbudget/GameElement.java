@@ -4,13 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-import static com.tacktic.inbudget.BaseScreen.VIEWPORT_WIDTH;
-import static com.tacktic.inbudget.BaseScreen.VIEWPORT_HEIGHT;
+import static com.tacktic.inbudget.screens.BaseScreen.VIEWPORT_WIDTH;
+import static com.tacktic.inbudget.screens.BaseScreen.VIEWPORT_HEIGHT;
 
 public abstract class GameElement {
-    abstract Texture texture();
 
-    abstract Rectangle box();
+    public abstract Texture texture();
+
+    public abstract Rectangle box();
 
     public float x() {
         return box().x;

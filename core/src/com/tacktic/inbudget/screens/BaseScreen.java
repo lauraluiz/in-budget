@@ -1,4 +1,4 @@
-package com.tacktic.inbudget;
+package com.tacktic.inbudget.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -8,9 +8,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.tacktic.inbudget.*;
+import com.tacktic.inbudget.sphere.Item;
+import com.tacktic.inbudget.sphere.Money;
 
 import java.math.BigDecimal;
-import java.util.concurrent.CompletableFuture;
 
 public abstract class BaseScreen implements Screen {
     public static final int VIEWPORT_WIDTH = 640;
@@ -31,11 +33,7 @@ public abstract class BaseScreen implements Screen {
         return game.resources();
     }
 
-    public CompletableFuture<Array<Item>> changeRound(int round) {
-        return game.fetchRound(round);
-    }
-
-    public CompletableFuture<BigDecimal> calculatePrice(Array<Item> items) {
+    public Money calculatePrice(Array<Item> items) {
         return game.fetchTotalPrice(items);
     }
 
@@ -59,9 +57,12 @@ public abstract class BaseScreen implements Screen {
 
     abstract void renderActions();
 
-    protected void moveToGameScreen(Array<Item> items) {
-        game.setScreen(new GameScreen(game, items, new BigDecimal(2500)));
-        dispose();
+    protected void moveToGameScreen(final int roundNumber) {
+        Array<Item> items = game.fetchRound(roundNumber);
+        if (items != null) {
+            game.setScreen(new GameScreen(game, items, new BigDecimal(2500)));
+            dispose();
+        }
     }
 
     protected void moveToMainMenuScreen() {
@@ -95,7 +96,7 @@ public abstract class BaseScreen implements Screen {
     protected void drawItem(Item item) {
         draw(item);
         draw(resources().priceTagImage(), item.x() - 12, item.y() - 20);
-        write(item.price(), Color.BLACK, 1, item.x(), item.y() + 10);
+        write(item.price().getAmountAsString(), Color.BLACK, 1, item.x(), item.y() + 10);
     }
 
     protected void drawBackground() {

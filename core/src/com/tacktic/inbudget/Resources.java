@@ -3,18 +3,13 @@ package com.tacktic.inbudget;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Resources {
     private final Texture backgroundImage;
     private final Texture topMenuImage;
     private final Texture bottomMenuImage;
     private final Texture girlImage;
-    private final Map<String, Texture> itemTextures;
     private final Texture priceTagImage;
     private final Sound dropSound;
     private final Music pianoMusic;
@@ -22,10 +17,6 @@ public class Resources {
     private Texture resultBackgroundImage;
 
     public Resources() {
-        itemTextures = new HashMap<String, Texture>();
-        for (FileHandle file : Gdx.files.internal("items").list()) {
-            itemTextures.put(file.nameWithoutExtension(), new Texture(file));
-        }
         blankImage = new Texture(Gdx.files.internal("none.png"));
         backgroundImage = new Texture(Gdx.files.internal("background-layer1.png"));
         topMenuImage = new Texture(Gdx.files.internal("background-layer3.png"));
@@ -36,14 +27,6 @@ public class Resources {
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
         pianoMusic = Gdx.audio.newMusic(Gdx.files.internal("music.wav"));
         pianoMusic.setLooping(true);
-    }
-
-    public Texture itemImage(String itemId) {
-        if (itemTextures.containsKey(itemId)) {
-            return itemTextures.get(itemId);
-        } else {
-            return blankImage;
-        }
     }
 
     public Texture girlImage() {
@@ -79,10 +62,6 @@ public class Resources {
     }
 
     public void dispose() {
-        for (Texture texture : itemTextures.values()) {
-            texture.dispose();
-        }
-        itemTextures.clear();
         backgroundImage.dispose();
         resultBackgroundImage.dispose();
         topMenuImage.dispose();

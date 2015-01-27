@@ -1,11 +1,10 @@
-package com.tacktic.inbudget;
+package com.tacktic.inbudget.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.Array;
+import com.tacktic.inbudget.InBudget;
 
 import java.math.BigDecimal;
-import java.util.function.Consumer;
 
 public class ResultScreen extends BaseScreen {
     private final BigDecimal budget;
@@ -29,15 +28,9 @@ public class ResultScreen extends BaseScreen {
         write("$" + totalPrice.toString(), Color.WHITE, 2, VIEWPORT_WIDTH/2 + 100, VIEWPORT_HEIGHT - 320);
         write("" + percentage.movePointRight(2) + "%", Color.WHITE, 2, VIEWPORT_WIDTH/2 + 100, VIEWPORT_HEIGHT - 400);
 
-        if (Gdx.input.isTouched()) {
+        if (loadingRound || Gdx.input.isTouched()) {
             loadingRound = true;
-            changeRound(1).thenAccept(new Consumer<Array<Item>>() {
-                @Override
-                public void accept(final Array<Item> items) {
-                    moveToGameScreen(items);
-                }
-            });
-
+            moveToGameScreen(1);
         }
     }
 
