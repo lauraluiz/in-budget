@@ -29,10 +29,11 @@ public class ItemRequest extends Request {
     @Override
     public void handleHttpResponse(final Net.HttpResponse httpResponse) {
         super.handleHttpResponse(httpResponse);
-        result = json.fromJson(ItemQueryResult.class, httpResponse.getResultAsString());
-        for (Item item : result.getResults()) {
+        ItemQueryResult query = json.fromJson(ItemQueryResult.class, httpResponse.getResultAsString());
+        for (Item item : query.getResults()) {
             item.load();
         }
+        result = query;
     }
 
     @Override
